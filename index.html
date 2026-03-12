@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>💗</title>
+
+<style>
+
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#ffb6c9;
+  font-family:Arial;
+  overflow:hidden;
+}
+
+/* ---------- KART ---------- */
+
+.card{
+  background:#ffdbe6;
+  padding:40px;
+  border-radius:25px;
+  text-align:center;
+  width:320px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  position:relative;
+}
+
+.bear{
+  position:absolute;
+  top:-60px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:60px;
+  animation:float 2s infinite ease-in-out;
+}
+
+@keyframes float{
+  0%{transform:translate(-50%,0);}
+  50%{transform:translate(-50%,-10px);}
+  100%{transform:translate(-50%,0);}
+}
+
+button{
+  padding:12px 20px;
+  margin:10px;
+  border:none;
+  border-radius:15px;
+  font-size:16px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+#duzelt{background:#ff6f9f;color:white;}
+#sg{background:white;}
+
+.glow{
+  font-size:50px;
+  color:white;
+  text-shadow:
+    0 0 10px #fff,
+    0 0 20px #ff69b4,
+    0 0 40px #ff69b4;
+  animation:shine 1.5s infinite alternate;
+}
+
+@keyframes shine{
+  from{opacity:.6;}
+  to{opacity:1;}
+}
+
+/* ---------- OYUN ---------- */
+
+.gameWrapper{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+}
+
+.gameArea{
+  width:400px;
+  height:400px;
+  background:#ffdbe6;
+  border-radius:25px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.heart{
+  position:absolute;
+  font-size:40px;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.sideBears{
+  font-size:40px;
+  animation:float 2s infinite ease-in-out;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+
+<div class="bear">🧸</div>
+
+<h3>
+özür dilerim sevgilim<br>
+hata yaptım<br>
+hatamı düzeltmek istiyorum
+</h3>
+
+<button id="duzelt">düzelt</button>
+<button id="sg">sg</button>
+
+</div>
+
+<script>
+
+/* ---------- SG MEKANİK ---------- */
+
+let sgCount = 0;
+const sgBtn = document.getElementById("sg");
+const duzeltBtn = document.getElementById("duzelt");
+
+sgBtn.onclick = function(){
+  sgCount++;
+
+  sgBtn.style.transform =
+    "scale("+(1 - sgCount*0.2)+")";
+
+  duzeltBtn.style.transform =
+    "scale("+(1 + sgCount*0.2)+")";
+
+  if(sgCount >= 4){
+    sgBtn.remove();
+  }
+};
+
+/* ---------- DÜZELT ---------- */
+
+duzeltBtn.onclick = function(){
+
+  document.body.innerHTML =
+  "<div class='glow'>askımMm ✨</div>";
+
+  setTimeout(startGame,2000);
+};
+
+
+/* ---------- OYUN ---------- */
+
+function startGame(){
+
+document.body.innerHTML = `
+
+<div class="gameWrapper">
+
+<div class="sideBears">🧸 🧸 🧸</div>
+
+<div class="gameArea" id="gameArea">
+<div class="heart" id="heart">❤️</div>
+</div>
+
+<div class="sideBears">🧸 🧸 🧸</div>
+
+</div>
+
+<!-- MÜZİK (linki değiştir) -->
+<iframe width="0" height="0"
+src="https://youtu.be/flwJtzEvswI?si=L9pE2MBxFYob2PwA"
+frameborder="0" allow="autoplay"></iframe>
+`;
+
+startHeartGame();
+}
+
+/* ---------- KAÇAN KALP ---------- */
+
+function startHeartGame(){
+
+const heart = document.getElementById("heart");
+const area = document.getElementById("gameArea");
+
+function moveHeart(){
+  const maxX = area.clientWidth - 50;
+  const maxY = area.clientHeight - 50;
+
+  const x = Math.random()*maxX;
+  const y = Math.random()*maxY;
+
+  heart.style.left = x+"px";
+  heart.style.top = y+"px";
+}
+
+heart.addEventListener("mouseenter", moveHeart);
+
+heart.onclick = function(){
+  document.body.innerHTML =
+  "<h1 class='glow'>kalbimi yakaladın 💗</h1>";
+};
+
+moveHeart();
+}
+
+</script>
+
+</body>
+</html>

@@ -1,13 +1,9 @@
-docs
- └ index.html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <title>💗</title>
-
 <style>
-
 body{
   margin:0;
   height:100vh;
@@ -20,7 +16,6 @@ body{
 }
 
 /* ---------- KART ---------- */
-
 .card{
   background:#ffdbe6;
   padding:40px;
@@ -75,7 +70,6 @@ button{
 }
 
 /* ---------- OYUN ---------- */
-
 .gameWrapper{
   display:flex;
   flex-direction:column;
@@ -105,113 +99,131 @@ button{
   animation:float 2s infinite ease-in-out;
 }
 
+/* ---------- PUAN ---------- */
+#score{
+  font-size:24px;
+  color:white;
+  text-shadow:0 0 10px #ff69b4;
+  margin-bottom:10px;
+}
+
+/* ---------- HIDDEN ---------- */
+#glowMsg, .gameWrapper { display:none; }
+
 </style>
 </head>
-
 <body>
 
 <div class="card" id="card">
+  <div class="bear">🧸</div>
+  <h3>
+    özür dilerim sevgilim<br>
+    hata yaptım<br>
+    hatamı düzeltmek istiyorum
+  </h3>
+  <button id="duzelt">düzelt</button>
+  <button id="sg">sg</button>
+</div>
 
-<div class="bear">🧸</div>
+<div id="glowMsg" class="glow">askımMm ✨</div>
 
-<h3>
-özür dilerim sevgilim<br>
-hata yaptım<br>
-hatamı düzeltmek istiyorum
-</h3>
-
-<button id="duzelt">düzelt</button>
-<button id="sg">sg</button>
-
+<div class="gameWrapper">
+  <div class="sideBears">🧸 🧸 🧸</div>
+  <div id="score">Puan: 0</div>
+  <div class="gameArea" id="gameArea">
+    <div class="heart" id="heart">❤️</div>
+  </div>
+  <div class="sideBears">🧸 🧸 🧸</div>
+  <!-- MÜZİK -->
+  <iframe width="0" height="0"
+  src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&loop=1&playlist=VIDEO_ID"
+  frameborder="0" allow="autoplay"></iframe>
 </div>
 
 <script>
-
-/* ---------- SG MEKANİK ---------- */
-
 let sgCount = 0;
 const sgBtn = document.getElementById("sg");
 const duzeltBtn = document.getElementById("duzelt");
+const glowMsg = document.getElementById("glowMsg");
+const card = document.getElementById("card");
+const gameWrapper = document.querySelector(".gameWrapper");
+const scoreElem = document.getElementById("score");
 
+/* SG MEKANİK */
 sgBtn.onclick = function(){
   sgCount++;
-
-  sgBtn.style.transform =
-    "scale("+(1 - sgCount*0.2)+")";
-
-  duzeltBtn.style.transform =
-    "scale("+(1 + sgCount*0.2)+")";
-
+  sgBtn.style.transform = "scale("+(1 - sgCount*0.2)+")";
+  duzeltBtn.style.transform = "scale("+(1 + sgCount*0.2)+")";
   if(sgCount >= 4){
     sgBtn.remove();
   }
 };
 
-/* ---------- DÜZELT ---------- */
-
+/* DÜZELT */
 duzeltBtn.onclick = function(){
+  card.style.display = "none";
+  glowMsg.style.display = "block";
 
-  document.body.innerHTML =
-  "<div class='glow'>askımMm ✨</div>";
-
-  setTimeout(startGame,2000);
+  setTimeout(() => {
+    glowMsg.style.display = "none";
+    gameWrapper.style.display = "flex";
+    startHeartGame();
+  }, 2000);
 };
 
-
-/* ---------- OYUN ---------- */
-
-function startGame(){
-
-document.body.innerHTML = `
-
-<div class="gameWrapper">
-
-<div class="sideBears">🧸 🧸 🧸</div>
-
-<div class="gameArea" id="gameArea">
-<div class="heart" id="heart">❤️</div>
-</div>
-
-<div class="sideBears">🧸 🧸 🧸</div>
-
-</div>
-
-<!-- MÜZİK (linki değiştir) -->
-<iframe width="0" height="0"
-src="https://youtu.be/flwJtzEvswI?si=L9pE2MBxFYob2PwA"
-frameborder="0" allow="autoplay"></iframe>
-`;
-
-startHeartGame();
-}
-
-/* ---------- KAÇAN KALP ---------- */
+/* KAÇAN KALP + PUAN */
+let score = 0;
 
 function startHeartGame(){
+  const heart = document.getElementById("heart");
+  const area = document.getElementById("gameArea");
 
-const heart = document.getElementById("heart");
-const area = document.getElementById("gameArea");
+  function moveHeart(){
+    const maxX = area.clientWidth - 50;
+    const maxY = area.clientHeight - 50;
+    const x = Math.random()*maxX;
+    const y = Math.random()*maxY;
+    heart.style.left = x+"px";
+    heart.style.top = y+"px";
+  }
 
-function moveHeart(){
-  const maxX = area.clientWidth - 50;
-  const maxY = area.clientHeight - 50;
+  heart.addEventListener("mouseenter", moveHeart);
 
-  const x = Math.random()*maxX;
-  const y = Math.random()*maxY;
+  heart.onclick = function(){
+    score++;
+    scoreElem.textContent = "Puan: " + score;
 
-  heart.style.left = x+"px";
-  heart.style.top = y+"px";
+    // Animasyon efekti
+    heart.style.transform = "scale(1.5)";
+    setTimeout(()=>heart.style.transform="scale(1)",200);
+
+    // Küçük patlama efekti
+    const pop = document.createElement("div");
+    pop.textContent = "💖";
+    pop.style.position = "absolute";
+    pop.style.left = heart.style.left;
+    pop.style.top = heart.style.top;
+    pop.style.fontSize = "24px";
+    pop.style.animation = "pop 0.5s ease-out";
+    document.getElementById("gameArea").appendChild(pop);
+    setTimeout(()=>pop.remove(),500);
+  };
+
+  moveHeart();
 }
 
-heart.addEventListener("mouseenter", moveHeart);
+/* POP ANİMASYON */
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes pop{
+  0%{transform:translateY(0);opacity:1;}
+  100%{transform:translateY(-30px);opacity:0;}
+}`;
+document.head.appendChild(style);
 
-heart.onclick = function(){
-  document.body.innerHTML =
-  "<h1 class='glow'>kalbimi yakaladın 💗</h1>";
-};
-
-moveHeart();
-}
+</script>
+</body>
+</html>
 
 </script>
 
